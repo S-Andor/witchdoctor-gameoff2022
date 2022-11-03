@@ -7,8 +7,6 @@ public class PlayerController : MonoBehaviour
 
     #region properties
     private Rigidbody mRigidBody;
-    //private CharacterController mPlayerController;
-    private Vector3 mPlayerVelocity;
    
     public bool isGrounded;
     public float speed;
@@ -17,8 +15,6 @@ public class PlayerController : MonoBehaviour
     public float jumpHeight;
     public GameObject player;
 
-    private Vector3 mMousePositionViewport = Vector3.zero;
-    private Quaternion mDesiredRotation = new Quaternion();
     public float rotationSpeed = 15;
     #endregion
     // Start is called before the first frame update
@@ -34,30 +30,30 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate()
     {
         Movement();     
-        Rotation();
     }
 
     private void Update()
     {
         Jump();
+        Rotation();
     }
     void Movement()
     {
-        Vector3 moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-        moveDirection = Camera.main.transform.TransformDirection(moveDirection);
+        Vector3 lMoveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+        lMoveDirection = Camera.main.transform.TransformDirection(lMoveDirection);
 
         //Sprint
         if (Input.GetKey(KeyCode.LeftShift))
         {
-            moveDirection *= 10.0f;
+            lMoveDirection *= 10.0f;
         }
         else
         {
-            moveDirection *= speed;
+            lMoveDirection *= speed;
         }
-        moveDirection.y = 0;
+        lMoveDirection.y = 0;
 
-        mRigidBody.MovePosition(mRigidBody.position + moveDirection * Time.fixedDeltaTime);
+        mRigidBody.MovePosition(mRigidBody.position + lMoveDirection * Time.fixedDeltaTime);
     }
 
     void Jump()
@@ -72,14 +68,14 @@ public class PlayerController : MonoBehaviour
 
     void Rotation()
     {
-        float y = Input.GetAxis("Mouse X") * rotationSpeed;
+        float y = Input.GetAxis("Mouse X") * rotationSpeed * Time.fixedDeltaTime;
         player.transform.eulerAngles = new Vector3(0, player.transform.eulerAngles.y + y, 0);
     }
 
 
     void OnTriggerEnter(Collider other)
     {
-        isGrounded = other.tag == "Ground";
+        isGrounded = other.CompareTag("Ground");
     }
 }
 

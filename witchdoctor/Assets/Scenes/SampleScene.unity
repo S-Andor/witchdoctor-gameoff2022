@@ -442,11 +442,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8eae9e514efef594888ecc1047e943f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _mouseSensitivity: 5
-  _target: {fileID: 2145457421}
-  _distanceFromTarget: 3
-  _smoothTime: 0
-  _rotationXMinMax: {x: 0, y: 60}
+  mMouseSensitivity: 3
+  mTarget: {fileID: 2145457421}
+  mDistanceFromTarget: 3
+  mSmoothTime: 0
+  mRotationXMinMax: {x: 0, y: 40}
 --- !u!1 &1031740944
 GameObject:
   m_ObjectHideFlags: 0
@@ -678,7 +678,7 @@ MonoBehaviour:
   isSprinting: 0
   jumpHeight: 2
   player: {fileID: 2145457417}
-  rotationSpeed: 2
+  rotationSpeed: 100
 --- !u!54 &2145457425
 Rigidbody:
   m_ObjectHideFlags: 0
