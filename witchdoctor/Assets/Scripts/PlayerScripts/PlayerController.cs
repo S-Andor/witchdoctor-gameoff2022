@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
 
     #region properties
     private Rigidbody mRigidBody;
+    private PlayerUIManager mPlayerUIManager;
    
     public bool isGrounded;
     public float speed;
@@ -14,6 +15,7 @@ public class PlayerController : MonoBehaviour
     public bool isSprinting;
     public float jumpHeight;
     public GameObject player;
+    public float rayDistance = 3;
 
     public float rotationSpeed = 15;
     #endregion
@@ -24,19 +26,22 @@ public class PlayerController : MonoBehaviour
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
         mRigidBody = GetComponent<Rigidbody>();
+        mPlayerUIManager = GetComponent<PlayerUIManager>();
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        Movement();     
+        Movement();   
     }
 
     private void Update()
     {
         Jump();
         Rotation();
+        DoRaycast();
     }
+    #region Movement
     void Movement()
     {
         Vector3 lMoveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
@@ -71,11 +76,49 @@ public class PlayerController : MonoBehaviour
         float y = Input.GetAxis("Mouse X") * rotationSpeed * Time.fixedDeltaTime;
         player.transform.eulerAngles = new Vector3(0, player.transform.eulerAngles.y + y, 0);
     }
+    #endregion Movement
 
 
+    #region Triggers
     void OnTriggerEnter(Collider other)
     {
         isGrounded = other.CompareTag("Ground");
     }
+    #endregion Triggers
+
+    #region Raycast
+    void DoRaycast()
+    {
+        int lLayerMask = ~3;
+
+        RaycastHit lHit;
+        Vector3 lOrigin = new Vector3(transform.transform.position.x, transform.position.y + 0.5f, transform.position.z);
+
+        if (Physics.Raycast(lOrigin,Camera.main.transform.forward, out lHit, rayDistance, lLayerMask))
+        {
+            Debug.DrawRay(lOrigin, Camera.main.transform.forward * lHit.distance, Color.red);
+            HandleItemRaycast(lHit);
+            return;
+        }
+        if(mPlayerUIManager.isPressEActive)
+            mPlayerUIManager.ShowHidePressText(false);
+    }
+
+    void HandleItemRaycast(RaycastHit pHit)
+    {
+        if (pHit.collider.TryGetComponent<ICollectible>(out var lCollectible))
+        {
+            if (mPlayerUIManager.isPressEActive == false)
+                mPlayerUIManager.ShowHidePressText(true);
+
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                var item = lCollectible.TakeItem();
+                if (item != null)
+                    Debug.Log("E pressed");
+            }
+        }
+    }
+    #endregion Raycast
 }
 
