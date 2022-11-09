@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour
     #region properties
     private Rigidbody mRigidBody;
     private PlayerUIManager mPlayerUIManager;
+    private Inventory mInventory;
    
     public bool isGrounded;
     public float speed;
@@ -16,17 +17,19 @@ public class PlayerController : MonoBehaviour
     public float jumpHeight;
     public GameObject player;
     public float rayDistance = 3;
-
     public float rotationSpeed = 15;
-    #endregion
+    #endregion properties
+
+    #region MonoBehaviour start/update/fixedUpdate etc.
     // Start is called before the first frame update
     void Start()
     {
-
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+
         mRigidBody = GetComponent<Rigidbody>();
         mPlayerUIManager = GetComponent<PlayerUIManager>();
+        mInventory = GetComponent<Inventory>();
     }
 
     // Update is called once per frame
@@ -41,6 +44,8 @@ public class PlayerController : MonoBehaviour
         Rotation();
         DoRaycast();
     }
+    #endregion MonoBehaviour start/update/fixedUpdate etc.
+
     #region Movement
     void Movement()
     {
@@ -78,11 +83,10 @@ public class PlayerController : MonoBehaviour
     }
     #endregion Movement
 
-
     #region Triggers
-    void OnTriggerEnter(Collider other)
+    void OnTriggerEnter(Collider pOther)
     {
-        isGrounded = other.CompareTag("Ground");
+        isGrounded = pOther.CompareTag("Ground");
     }
     #endregion Triggers
 
@@ -113,9 +117,19 @@ public class PlayerController : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.E))
             {
-                var item = lCollectible.TakeItem();
-                if (item != null)
-                    Debug.Log("E pressed");
+                if(mInventory.MaxInventorySpace > mInventory.ItemCount)
+                {
+                    var lItem = lCollectible.TakeItem();
+                    if (lItem != null)
+                    {
+                        mInventory.AddItem(lItem);
+                    }
+                }
+                else
+                {
+                    Debug.Log("Inventory full");
+                }
+
             }
         }
     }

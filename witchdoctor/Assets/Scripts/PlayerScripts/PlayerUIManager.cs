@@ -11,21 +11,18 @@ public class PlayerUIManager : MonoBehaviour
     public bool isPressEActive = false;
     #endregion properties
 
+    #region MonoBehaviour
     void Start()
     {
         ShowHidePressText(isPressEActive);
     }
+    #endregion MonoBehaviour
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+    #region Press E UI
     public void ShowHidePressText(bool pShow)
     {
         isPressEActive = pShow; 
-        Debug.Log("called" + pShow);
         PressETxt.gameObject.SetActive(isPressEActive);
     }
+    #endregion Press E UI
 }

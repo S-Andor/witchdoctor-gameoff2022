@@ -12,3 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d922f181c85ce2b46a95366504519108, type: 3}
   m_Name: Collectible
   m_EditorClassIdentifier: 
+  Name: Carrot
+  Sprite: {fileID: 21300000, guid: 04f11c4b2db86d74eb9660af4e8e752f, type: 3}
