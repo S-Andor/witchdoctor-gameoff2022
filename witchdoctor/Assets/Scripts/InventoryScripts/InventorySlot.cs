@@ -13,10 +13,9 @@ public class InventorySlot : MonoBehaviour
 
     #region properties
     private List<ICollectible> mCollectibleItems  = new List<ICollectible>();
-    private Image mImage;
 
     public ICollectible ItemType { get; private set; }
-    public int Count { get; private set; }
+    public int Count { get { return mCollectibleItems.Count; }}
     public int MaxCount { get => 8; }
 
     [SerializeField]
@@ -25,22 +24,15 @@ public class InventorySlot : MonoBehaviour
     public TMP_Text ItemName;
     public GameObject ItemCount;
     public GameObject Button;
+    public Image Image;
     #endregion properties
 
     #region MonoBehaviour
-    private void Start()
-    {
-        mImage = Slot.GetComponent<Image>();
-        Count = 0;
-
-    }
     #endregion MonoBehaviour
 
     #region Add/Remove Items
     public void AddItem(ICollectible pItem)
     {
-        Count++;
-
         TxtBackground.SetActive(true);
         ItemCount.SetActive(true);
         Button.SetActive(true);
@@ -48,12 +40,12 @@ public class InventorySlot : MonoBehaviour
         ItemType = pItem;
         mCollectibleItems.Add(pItem);
 
-        mImage.sprite = pItem.CollectibleSO.Sprite;
+        Image.sprite = pItem.CollectibleSO.Sprite;
 
         ItemName.SetText(pItem.CollectibleSO.Name);
         ItemCount.GetComponent<TMP_Text>().SetText(Count.ToString());
 
-        mImage.enabled = true;
+        Image.enabled = true;
 
     }
     public void DropItems()
@@ -70,7 +62,6 @@ public class InventorySlot : MonoBehaviour
     #region Helpers
     public void IncreaseCount(ICollectible pItem)
     {
-        Count++;
         mCollectibleItems.Add( pItem);
         ItemCount.GetComponent<TMP_Text>().SetText(Count.ToString());
     }
@@ -84,13 +75,13 @@ public class InventorySlot : MonoBehaviour
 
         ItemType = null;
 
-        Count = 0;
-        mImage.sprite = null;
+        mCollectibleItems = new List<ICollectible>();
+        Image.sprite = null;
 
         ItemName.SetText("");
         ItemCount.GetComponent<TMP_Text>().SetText("");
 
-        mImage.enabled = false;
+        Image.enabled = false;
     }
     #endregion Helpers
 }

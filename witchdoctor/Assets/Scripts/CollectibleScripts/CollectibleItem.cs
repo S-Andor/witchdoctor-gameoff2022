@@ -39,5 +39,13 @@ public class CollectibleItem : MonoBehaviour, ICollectible
         InUI = false;
         mRigidbody = GetComponent<Rigidbody>();
     }
+    void Update()
+    {
+        if(transform.position.y < -100)
+        {
+            mRigidbody.velocity = new Vector3();
+            gameObject.transform.position = new Vector3(transform.position.x, 4.0f, transform.position.z);
+        }
+    }
     #endregion Monobehvaior
 }

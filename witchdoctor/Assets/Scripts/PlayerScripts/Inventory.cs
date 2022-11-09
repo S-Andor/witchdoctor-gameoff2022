@@ -12,7 +12,7 @@ public class Inventory : MonoBehaviour
 
     #region Properties
     private List<ICollectible> mItems = new List<ICollectible>();
-    private int mID = 0;
+    private int mID = 1;
 
     public int MaxInventorySpace { get { return 128; } }
     public int ItemCount { get { return mItems.Count; } }
@@ -23,7 +23,9 @@ public class Inventory : MonoBehaviour
     #region Add/Remove
     public void AddItem(ICollectible pItem)
     {
-        pItem.ID = mID++;
+        if (pItem.ID == 0)
+            pItem.ID = mID++;
+
         mItems.Add(pItem);
         OnInventoryChange(pItem);
     }
@@ -38,6 +40,7 @@ public class Inventory : MonoBehaviour
         });
 
         mItems = mItems.Where(x => !pItemIDs.Contains(x.ID)).ToList();
+        mItems.ForEach(x => Debug.Log(x.ID));
     }
 
     #endregion Add/Remove
