@@ -38,8 +38,16 @@ public class InventoryUI : MonoBehaviour
     #endregion MonoBehaviour
 
     #region UI update
-    void UpdateUI(ICollectible pItem)
+    void UpdateUI(InventoryChangeType pChangeType)
     {
+        if(InventoryChangeType.REMOVED_ALL == pChangeType)
+        {
+            foreach(InventorySlot iSlot in mInventorySlots)
+            {
+                iSlot.ResetSlot();
+            }
+        }
+
         for(int i = 0; i < Inventory.Items.Count; i++)
         {
             if (Inventory.GetItem(i).InUI == false && Inventory.GetItem(i) != null)

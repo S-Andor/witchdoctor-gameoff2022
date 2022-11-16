@@ -6,7 +6,7 @@ using System.Linq;
 public class Inventory : MonoBehaviour
 {
     #region Events
-    public delegate void InventoryChange(ICollectible pItem);
+    public delegate void InventoryChange(InventoryChangeType pChangeType);
     public static event InventoryChange OnInventoryChange;
     #endregion Events
 
@@ -27,7 +27,7 @@ public class Inventory : MonoBehaviour
             pItem.ID = mID++;
 
         mItems.Add(pItem);
-        OnInventoryChange(pItem);
+        OnInventoryChange(InventoryChangeType.ADDED_ITEM);
     }
 
     public void RemoveItems(List<int> pItemIDs)
@@ -40,9 +40,21 @@ public class Inventory : MonoBehaviour
         });
 
         mItems = mItems.Where(x => !pItemIDs.Contains(x.ID)).ToList();
-        mItems.ForEach(x => Debug.Log(x.ID));
     }
 
+    public void RemoveAllItems()
+    {
+        List<ICollectible> lDroppedItems = new List<ICollectible>();
+        lDroppedItems = mItems;
+        lDroppedItems.ForEach(i => {
+            i.InUI = false;
+            i.DropItem(gameObject.transform.position + transform.forward);
+        });
+
+        mItems = new List<ICollectible>();
+        OnInventoryChange(InventoryChangeType.REMOVED_ALL);
+
+    }
     #endregion Add/Remove
 
     #region GettingInfo

@@ -66,7 +66,7 @@ public class InventorySlot : MonoBehaviour
         ItemCount.GetComponent<TMP_Text>().SetText(Count.ToString());
     }
 
-    void ResetSlot()
+    public void ResetSlot()
     {
 
         TxtBackground.SetActive(false);

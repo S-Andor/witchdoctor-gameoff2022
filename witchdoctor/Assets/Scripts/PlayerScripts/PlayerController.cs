@@ -83,10 +83,17 @@ public class PlayerController : MonoBehaviour
     }
     #endregion Movement
 
-    #region Triggers
+    #region Triggers & Collisions
     void OnTriggerEnter(Collider pOther)
     {
-        isGrounded = pOther.CompareTag("Ground");
+        isGrounded = pOther.CompareTag(TagEnum.GROUND);
+    }
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.collider.CompareTag(TagEnum.ENEMY))
+        {
+            mInventory.RemoveAllItems();
+        }
     }
     #endregion Triggers
 
